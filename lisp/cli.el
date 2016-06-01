@@ -207,6 +207,20 @@
   (remove-directory!
    (prefix-get prefix (car args)))) 
 
+(cl-defun command-help ()
+  (princ-newline
+   " commands: get ls clean link build install reinstall deinstall
+
+    emb get version
+    emb ls [version]
+    emb clean [version]
+    emb link version
+    emb build version
+    emb install version
+    emb deinstall version
+    emb reinstall version "))
+
+
 (cl-defun main (prefix args)
   (init-prefix prefix)
   (cl-letf ((rargs (cdr args)))
@@ -232,7 +246,11 @@
       ("link"
        (command-link prefix rargs))
       ("deinstall"
-       (command-deinstall prefix rargs)))))
+       (command-deinstall prefix rargs))
+      ("help"
+       (command-help))
+      (_
+       (command-help)))))
 
 (main emb-prefix (cdr argv))
 
