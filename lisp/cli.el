@@ -89,7 +89,7 @@
   (terpri))
 
 
-(cl-defun command-build (prefix args)
+(cl-defun command-build-make (prefix args)
   (remove-directory! (prefix-build prefix (car args)))
   (with-directory (prefix-get prefix (car args))
     (princ-newline "* Updating repository")
@@ -128,9 +128,14 @@
                   " --without-xaw3d"         
                   " --without-gpm"           
                   " --without-makeinfo"
-                  " CC=clang-devel MAKE=gmake "))
+                  " CC=clang-devel MAKE=gmake CFLAGS='-O2'"))
     (princ-newline "* Building emacs...")
     (exec "gmake V=0 --silent")
+    (princ "* Installing emacs...")
+    (exec "gmake install")))
+
+(cl-defun command-build-make-install (prefix args)
+  (with-directory (prefix-get prefix (car args))
     (princ "* Installing emacs...")
     (exec "gmake install")))
 
@@ -234,8 +239,9 @@
       ("reinstall"
        (command-clean prefix rargs)
        (command-get prefix rargs)
+       (command-build-make prefix rargs)
        (command-deinstall prefix rargs)
-       (command-build prefix rargs)
+       (command-build-make-install prefix rargs)
        (command-link prefix rargs))
       ("get"
        (command-get prefix rargs))
