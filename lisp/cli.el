@@ -258,6 +258,6 @@
       (_
        (command-help)))))
 
-(main emb-prefix (cdr argv))
+(main emb-prefix (cdr command-line-args-left))
 
 ;;; cli.el ends here
